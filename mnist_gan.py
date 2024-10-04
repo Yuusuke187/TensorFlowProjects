@@ -20,3 +20,8 @@ import numpy as np
 randomDim = 10
 (X_train, _), (_, _) = mnist.load_data()
 X_train = (X_train.astype(np.float32) - 127.5) / 127.5
+
+# Using a multi-layered perceptron an image wiht a size of 784
+# and 60,000 training images
+X_train = X_train.reshape(60000, 784)
+
