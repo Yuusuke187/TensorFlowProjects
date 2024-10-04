@@ -1,4 +1,7 @@
-from tensorflow.keras.datasets import mnist 
+# This code will be used to build a Generative Adversarial Network 
+# for generating handwritten digits
+
+from tensorflow.keras.datasets import mnist
 
 from tensorflow.keras.layers import Input, Dense, Reshape, Flatten, Dropout
 from tensorflow.keras.layers import BatchNormalization, Activation, ZeroPadding2D
