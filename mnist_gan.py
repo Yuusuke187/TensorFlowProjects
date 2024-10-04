@@ -25,3 +25,79 @@ X_train = (X_train.astype(np.float32) - 127.5) / 127.5
 # and 60,000 training images
 X_train = X_train.reshape(60000, 784)
 
+# Building a generator
+generator = Sequential() 
+
+# Adding 256 neurons
+generator.add(Dense(256, input_dim=randomDim))
+
+# Adding a Leaky Rectified Linear Unit
+generator.add(LeakyReLU(0.2))
+
+# Adding a 512 neuron hidden layer
+generator.add(Dense(512))
+
+# And another Leaky ReLU
+generator.add(LeakyReLU(0.2))
+
+# Adding another hidden layer with 1024 neurons
+generator.add(Dense(1024))
+
+# Yet another Leaky ReLU
+generator.add(LeakyReLU(0.2))
+
+# Finally, an output layer of 784 neurons
+generator.add(Dense(784, activation='tanh'))
+
+
+# Now, we build the discrimiator
+discriminator = Sequential()
+
+# The input size for this discriminator will be 784
+discriminator.add(Dense(1024, input_dim=784, kernel_initializer=initializers.RandomNormal(stddev=0.02)))
+
+# Adding a Leaky ReLU
+discriminator.add(LeakyReLU(0.2))
+
+# Add a dropout
+discriminator.add(Dropout(0.3))
+
+discriminator.add(Dense(512))
+discriminator.add(LeakyReLU(0.2))
+discriminator.add(Dropout(0.3))
+
+discriminator.add(Dense(256))
+discriminator.add(LeakyReLU(0.2))
+discriminator.add(Dropout(0.3))
+
+discriminator.add(Dense(1, activation='sigmoid'))
+
+# Combine the generator and the discriminator to form a GAN
+discriminator.trainable = False
+ganInput = Input (shape=(randomDim,))
+ganOutput = discriminator(x)
+gan = Model(inputs=ganInput, outputs=ganOutput)
+
+# Freeze the weights of the discriminator
+discriminator.compile(loss='binary_crossentropy', optimizer='adam')
+gan.compile(loss='binary_crossentropy', optimizer='adam')
+
+# Begin training
+def train(epochs=1, batchSize=128):
+    batchCount = int(X_train.shape[0] / batchSize)
+    print('Epochs:', epochs)
+    print('Batch size:', batchSize)
+    print('Batches per epoch:', batchCount)
+    for e in range(1, epochs+1):
+        print('-'*15, 'Epoch %d' % e, '-'*15)
+        # Get a random set of random noise and images
+        for _ in range(batchCount):
+            noise = np.random.normal(0, 1, size=[batchSize, randomDim])
+            # Generate fake MNIST images
+            imageBatch = X_train[np.random.randint(0, X_train.shape[0], size=batchSize)]
+            generatedImages = generator.predict(noise)
+            # Labels for generated and real data
+            X = np.concatenate([imageBatch, generatedImages])
+            # One-sided label smoothing
+            yDis = np.zeros(2*batchSize)
+            
