@@ -117,3 +117,17 @@ def train(epochs=1, batchSize=128):
 
 
 
+# Plot hte loss from each batch
+def plotLoss(epoch):
+    plt.figure(figsize=(10, 8))
+    plt.plot(dLosses, label='Discriminative loss')
+    plt.plot(gLosses, label='Generative loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.savefig('images/gan_loss_epoch_%d.png' % epoch)
+    
+# Create an Array of generated MNIST images
+def saveGeneratedImages(epoch, examples=100, dim=(10,10), figsize=(10,10)):
+    noise = np.random.normal(0, 1, size=[examples, randomDim])
+    
