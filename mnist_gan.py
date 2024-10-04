@@ -100,4 +100,11 @@ def train(epochs=1, batchSize=128):
             X = np.concatenate([imageBatch, generatedImages])
             # One-sided label smoothing
             yDis = np.zeros(2*batchSize)
+            # Train the discriminator
+            yDis[:batchSize]
+            discriminator.trainable = True
+            dloss = discriminator.train_on_batch(X, yDis)
             
+
+# Now to train the generator
+noise = np.random.normal(0, 1, size=[batchSize, randomDim])
