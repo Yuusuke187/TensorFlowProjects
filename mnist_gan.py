@@ -104,11 +104,16 @@ def train(epochs=1, batchSize=128):
             yDis[:batchSize]
             discriminator.trainable = True
             dloss = discriminator.train_on_batch(X, yDis)
-            
+            # Now to train the generator
+            noise = np.random.normal(0, 1, size=[batchSize, randomDim])
+            yGen = np.ones(batchSize)
+            discriminator.trainable = False
+            gloss = gan.train_on_batch(noise, yGen)
+            # Store the loss of hte most recent batch from this epoch
+            dLosses.append(dloss)
+            gLosses.append(gloss)
+            if e == 1 or e % 20 == 0:
+                saveGeneratedImages(e)
 
-# Now to train the generator
-noise = np.random.normal(0, 1, size=[batchSize, randomDim])
-yGen = np.ones(batchSize)
-discriminator.trainable = False
-gloss = gan.train_on_batch(noise, yGen)
+
 
