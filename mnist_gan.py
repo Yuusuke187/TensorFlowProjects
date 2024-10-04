@@ -82,7 +82,7 @@ gan = Model(inputs=ganInput, outputs=ganOutput)
 discriminator.compile(loss='binary_crossentropy', optimizer='adam')
 gan.compile(loss='binary_crossentropy', optimizer='adam')
 
-# Begin training
+# Begin training the discriminator
 def train(epochs=1, batchSize=128):
     batchCount = int(X_train.shape[0] / batchSize)
     print('Epochs:', epochs)
