@@ -108,3 +108,7 @@ def train(epochs=1, batchSize=128):
 
 # Now to train the generator
 noise = np.random.normal(0, 1, size=[batchSize, randomDim])
+yGen = np.ones(batchSize)
+discriminator.trainable = False
+gloss = gan.train_on_batch(noise, yGen)
+
