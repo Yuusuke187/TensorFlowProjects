@@ -118,7 +118,7 @@ def train(epochs=1, batchSize=128):
 
 
 
-# Plot hte loss from each batch
+# Plot the loss from each batch
 def plotLoss(epoch):
     plt.figure(figsize=(10, 8))
     plt.plot(dLosses, label='Discriminative loss')
@@ -131,4 +131,8 @@ def plotLoss(epoch):
 # Create an Array of generated MNIST images
 def saveGeneratedImages(epoch, examples=100, dim=(10,10), figsize=(10,10)):
     noise = np.random.normal(0, 1, size=[examples, randomDim])
-    
+    generatedImages = generator.predict(noise)
+    generatedImages = generatedImages.reshape(examples, 28, 28)
+    plt.figure(figsize=figsize)
+    for i in range(generatedImages.shape[0]):
+        
