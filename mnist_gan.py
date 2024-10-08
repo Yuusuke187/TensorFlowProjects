@@ -75,6 +75,7 @@ discriminator.add(Dense(1, activation='sigmoid'))
 # Combine the generator and the discriminator to form a GAN
 discriminator.trainable = False
 ganInput = Input (shape=(randomDim,))
+x = generator(ganInput)
 ganOutput = discriminator(x)
 gan = Model(inputs=ganInput, outputs=ganOutput)
 
